@@ -40,13 +40,6 @@ class Graph:
             Graph.traceToParent(currentVertex.parent)
             Graph.printArr(currentVertex.arr)
             print("STATE:", currentVertex.state)
-    
-    
-    
-"""TODO: Create class to check for odd parity."""
-                
-    
-    
 
     def createChildren(currentVertex, goalArr): ##Reference goal here?
         """Expands vertex (node) for all potential moves."""
@@ -96,9 +89,7 @@ class Graph:
 
 
         return
-
-    
-        
+       
     def createNextState(head, goalArr, currState):
         
         tmpState = currState
@@ -120,20 +111,22 @@ class Graph:
         tmpState += 1
         Graph.createNextState(head, goalArr, tmpState)
 
-
-
-
-
-
-
-
+    def getParity(puzzleArr):
+        parity = 0
+        for i in range(8): # only go to 8 because we don't need to check the last one
+            for j in range(i+1, 9):
+                if puzzleArr[i] == ' ' or puzzleArr[j] == ' ':
+                    continue
+                if puzzleArr[i] > puzzleArr[j]:
+                        parity += 1
+        return parity
+ 
     def initTree(head, goalArr):
             Graph.arrayDict.append(head.arr)
             Graph.createChildren(head, goalArr)
-            
-            
-            
-            
+            print(Graph.getParity(head.arr))
+            print(Graph.getParity(goalArr))
+
             Graph.createNextState(head, goalArr, 1)
             
     
@@ -141,7 +134,7 @@ class Graph:
 
     
 class Main:
-    
+
     ax = [1,2,3,4,8,5,7,' ',6]
     goalAX = [1,2,3,4,5,6,7,8,' ']
     
