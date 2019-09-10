@@ -113,21 +113,27 @@ class Graph:
 
     def getParity(puzzleArr):
         parity = 0
-        for i in range(8): # only go to 8 because we don't need to check the last one
+        for i in range(8): # only go to 8 because we don't need to check the last number
             for j in range(i+1, 9):
-                if puzzleArr[i] == ' ' or puzzleArr[j] == ' ':
+                if puzzleArr[i] == ' ' or puzzleArr[j] == ' ': # ignore the blank space
                     continue
-                if puzzleArr[i] > puzzleArr[j]:
+                if puzzleArr[i] > puzzleArr[j]: # inversion found, increase parity count
                         parity += 1
         return parity
+
+    # determine if start parity matches goal parity
+    def isSolvable(start, goal):
+        return (Graph.getParity(start)) % 2 == (Graph.getParity(goal)) % 2
  
     def initTree(head, goalArr):
+        if Graph.isSolvable(head.arr, goalArr):
             Graph.arrayDict.append(head.arr)
             Graph.createChildren(head, goalArr)
-            print(Graph.getParity(head.arr))
-            print(Graph.getParity(goalArr))
 
             Graph.createNextState(head, goalArr, 1)
+
+        else:
+            print("This puzzle is not solvable!")
             
     
 
