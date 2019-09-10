@@ -1,0 +1,155 @@
+
+
+class Vertex:    
+    """Class representing each puzzle."""
+    queList = []
+    finished = False
+    finalNodes = 0
+
+    def __init__(self, arr=[], state= 0, parent = None, expanded = False, children = []):
+        """Initializes Vertex object with default parameters."""
+        self.arr = arr
+        self.state = state
+        self.parent = parent
+        self.children = children
+        self.expanded = expanded
+    
+    
+class Graph:
+    
+    arrayDict = []
+    
+    
+    def printArr(arr):
+        """Prints the array formatted in lines of three"""
+        print()
+        print(arr[:3])
+        print(arr[3:6])
+        print(arr[6:])
+    
+    
+    
+    def traceToParent(currentVertex):
+        """Prints path to given vertex starting at head (state=0)"""
+        """To use to display path to solution when found."""
+        if currentVertex.state == 0:
+            Graph.printArr(currentVertex.arr)
+            print("STATE:", currentVertex.state)
+            return
+        else:
+            Graph.traceToParent(currentVertex.parent)
+            Graph.printArr(currentVertex.arr)
+            print("STATE:", currentVertex.state)
+    
+    
+    
+"""TODO: Create class to check for odd parity."""
+                
+    
+    
+
+    def createChildren(currentVertex, goalArr): ##Reference goal here?
+        """Expands vertex (node) for all potential moves."""
+        
+        """TODO: code in goal solution rather than referencing by "goalArr"
+                May have to fix number of open nodes. Double check number is accurate."""
+    
+        
+        pos = currentVertex.arr.index(' ') #current position of empty space.
+
+        nPos = 0 #Iteration of potitions to find potential moves.
+        
+        while(nPos < 9):
+            tmpArr =  currentVertex.arr.copy()
+            if abs(pos - nPos) in [1,3]:
+                tmpArr[pos] = tmpArr[nPos]
+                tmpArr[nPos] = ' '
+
+                            
+                if tmpArr == goalArr: #Solution found. Exit.
+                    print("HOORAH")
+                    currentVertex.expanded = True
+                    tmpVertex = Vertex(tmpArr.copy(), currentVertex.state + 1, currentVertex, True, [])
+                    currentVertex.children.append(tmpVertex)
+                    Graph.arrayDict.append(tmpArr)
+                    Graph.traceToParent(tmpVertex)
+                    Vertex.finished = True
+                    Vertex.finalNodes += 1
+                    return 
+                    
+                else:
+                    
+                    if str(tmpArr) in Graph.arrayDict:
+                        return #Array value already exists.
+                    else:
+                        Graph.arrayDict.append(tmpArr)
+                        currentVertex.children.append(Vertex(tmpArr.copy(), currentVertex.state + 1, currentVertex, False, []))
+                        Vertex.finalNodes += 1
+                    
+                    
+                
+                        
+            nPos += 1
+                        
+        currentVertex.expanded = True;
+
+
+
+        return
+
+    
+        
+    def createNextState(head, goalArr, currState):
+        
+        tmpState = currState
+        
+        if Vertex.finished == True:
+            return
+            
+        if head.expanded == False:
+            Graph.createChildren(head, goalArr)
+
+        
+        
+        for nextVertex in head.children:
+            if tmpState == nextVertex.state:
+                if nextVertex.expanded == False:
+                    Graph.createChildren(nextVertex, goalArr)
+            else:
+                Graph.createNextState(nextVertex, goalArr, tmpState)
+        tmpState += 1
+        Graph.createNextState(head, goalArr, tmpState)
+
+
+
+
+
+
+
+
+    def initTree(head, goalArr):
+            Graph.arrayDict.append(head.arr)
+            Graph.createChildren(head, goalArr)
+            
+            
+            
+            
+            Graph.createNextState(head, goalArr, 1)
+            
+    
+
+
+    
+class Main:
+    
+    ax = [1,2,3,4,8,5,7,' ',6]
+    goalAX = [1,2,3,4,5,6,7,8,' ']
+    
+    nv = Vertex(ax, 0, None, False, [])
+    
+    Graph.initTree(nv, goalAX)
+    
+    print("\nOpen Nodes: ", Vertex.finalNodes)
+    
+
+  
