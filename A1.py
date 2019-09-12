@@ -13,6 +13,15 @@ class Vertex:
         self.parent = parent
         self.children = children
         self.expanded = expanded
+
+    # calculates Manhattan Distance for puzzle according to passed in goal array
+    def manhattanDistance(self, goal):
+        manhattan = 0
+        for i in range(9):
+            goal_index = goal.find(self.arr[i])
+            manhattan += ( abs((i / 3) - (goal_index / 3)) +  # calculate number of rows needed to move
+                            abs((i % 3) - (goal_index % 3)) ) # calculate number of columns needed to move
+        return manhattan
     
     
 class Graph:
