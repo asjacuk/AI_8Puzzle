@@ -19,7 +19,7 @@ class Vertex:
         manhattan = 0
         for i in range(9):
             goal_index = goal.index(self.arr[i])
-            manhattan += ( abs((i / 3) - (goal_index / 3)) +  # calculate number of rows needed to move
+            manhattan += ( abs((i // 3) - (goal_index // 3)) +  # calculate number of rows needed to move
                             abs((i % 3) - (goal_index % 3)) ) # calculate number of columns needed to move
         return manhattan
     
