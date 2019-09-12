@@ -13,6 +13,8 @@ class Vertex:
         self.parent = parent
         self.children = children
         self.expanded = expanded
+        self.g = 0
+        self.h = 0
 
     # takes a goal array and returns number of misplaced tiles from current puzzle state to goal
     def misplacedTiles(self, goal):
@@ -22,11 +24,35 @@ class Vertex:
     # calculates Manhattan Distance for puzzle according to passed in goal array
     def manhattanDistance(self, goal):
         manhattan = 0
-        for i in range(9):
+        for i in range(len(self.arr)):
             goal_index = goal.index(self.arr[i])
             manhattan += ( abs((i // 3) - (goal_index // 3)) +  # calculate number of rows needed to move
                             abs((i % 3) - (goal_index % 3)) ) # calculate number of columns needed to move
         return manhattan
+
+    # calculates Gaschnig's heuristic from current puzzle state to goal
+    def gaschnig(self, goal):
+        gaschnig = 0
+        complete = False
+        while not complete:
+            blank_index = self.arr.index(' ') # get index of ' ' in current puzzle
+            if goal[blank_index] != ' ': # ' ' not at same spot in goal
+                target_index = self.arr.index(goal[blank_index])
+                self.arr[blank_index] = goal[blank_index] # swap ' ' with correct number from goal
+                self.arr[target_index] = ' '
+                gaschnig += 1
+            else: # ' ' matched, check puzzle for completeness
+                for i in range(len(self.arr)):
+                    if self.arr[i] != goal[i]: # mismatch, puzzle not complete
+                        self.arr[blank_index] = self.arr[i]
+                        self.arr[i] = ' '
+                        gaschnig += 1
+                        break
+                complete = True # all done
+        return gaschnig
+
+
+            
     
     
 class Graph:
