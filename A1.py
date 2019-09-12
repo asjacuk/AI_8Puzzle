@@ -14,6 +14,11 @@ class Vertex:
         self.children = children
         self.expanded = expanded
 
+    # takes a goal array and returns number of misplaced tiles from current puzzle state to goal
+    def misplacedTiles(self, goal):
+            return sum(1 for i, j in zip(self.arr, goal) if i != j) 
+            
+
     # calculates Manhattan Distance for puzzle according to passed in goal array
     def manhattanDistance(self, goal):
         manhattan = 0
