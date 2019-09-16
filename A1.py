@@ -18,7 +18,8 @@ class Vertex:
 
     # takes a goal array and returns number of misplaced tiles from current puzzle state to goal
     def misplacedTiles(self, goal):
-            return sum(1 for i, j in zip(self.arr, goal) if i != j) 
+        self.h = sum(1 for i, j in zip(self.arr, goal) if i != j)
+        return self.h
             
 
     # calculates Manhattan Distance for puzzle according to passed in goal array
@@ -28,6 +29,7 @@ class Vertex:
             goal_index = goal.index(self.arr[i])
             manhattan += ( abs((i // 3) - (goal_index // 3)) +  # calculate number of rows needed to move
                             abs((i % 3) - (goal_index % 3)) ) # calculate number of columns needed to move
+        self.h = manhattan
         return manhattan
 
     # calculates Gaschnig's heuristic from current puzzle state to goal
@@ -49,6 +51,7 @@ class Vertex:
                         gaschnig += 1
                         break
                 complete = True # all done
+        self.h = gaschnig
         return gaschnig
 
 
