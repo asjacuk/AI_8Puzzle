@@ -178,16 +178,14 @@ class Graph:
         else:
             print("This puzzle is not solvable!")
             
-    
-
-
-    
 class Main:
 
     ax = [1,2,3,4,8,5,7,' ',6]
     goalAX = [1,2,3,4,5,6,7,8,' ']
     
     nv = Vertex(ax, 0, None, False, [])
+    goal = Vertex(goalAX)
+    a_star(nv, goal, Vertex.misplacedTiles)
     
     Graph.initTree(nv, goalAX)
     
