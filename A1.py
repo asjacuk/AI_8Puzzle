@@ -177,7 +177,16 @@ class Graph:
 
         else:
             print("This puzzle is not solvable!")
-            
+
+class a_star:
+    
+    def __init__(self, start, goal, h_func):
+        open_nodes = {start}
+        
+        g = {start:0}
+        f = {start:h_func(start, goal.arr)}
+        print(f[start])
+
 class Main:
 
     ax = [1,2,3,4,8,5,7,' ',6]
