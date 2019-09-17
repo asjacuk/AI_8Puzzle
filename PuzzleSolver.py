@@ -11,6 +11,7 @@ class PuzzleSolver:
         self.expanded = 0 # counter for number of expanded nodes during search
 
         # initialize PriorityQueue for tracking open nodes
+        self.found_nodes = [self.start]
         self.open_nodes = PriorityQueue()
         self.open_nodes.put(self.start)
 
@@ -56,32 +57,36 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos+1]
             child_arr[pos+1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.closed_nodes:
+            if new_child not in self.found_nodes:
                 children.append(new_child)
+                self.found_nodes.append(new_child)
         
         if pos % 3 == 1 or pos % 3 == 2: # can move blank left
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-1]
             child_arr[pos-1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.closed_nodes:
+            if new_child not in self.found_nodes:
                 children.append(new_child)
+                self.found_nodes.append(new_child)
         
         if pos // 3 == 0 or pos // 3 == 1: # can move blank down
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos+3]
             child_arr[pos+3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.closed_nodes:
+            if new_child not in self.found_nodes:
                 children.append(new_child)
+                self.found_nodes.append(new_child)
 
         if pos // 3 == 1 or pos // 3 == 2: # can move blank up
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-3]
             child_arr[pos-3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.closed_nodes:
+            if new_child not in self.found_nodes:
                 children.append(new_child)
+                self.found_nodes.append(new_child)
 
         return children
 
@@ -92,6 +97,9 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
+            if self.expanded > 10000:
+                print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
+                return
             current = self.open_nodes.get() # get lowest f score node
 
             if current.puzzle_arr == self.goal: # found solution, get the path
@@ -105,35 +113,53 @@ class PuzzleSolver:
             self.expanded += 1 # increase in expanded counter
 
 class Main:
-    start_arr = [1,2,3,
-                 4,8,5,
-                 7,0,6]
+    easy_start   = [1,2,3,
+                    4,8,5,
+                    7,0,6]
 
-    goal_arr  = [1,2,3,
-                 4,5,6,
-                 7,8,0]
+    medium_start = [3,6,4,
+                    0,1,2,
+                    8,7,5]
     
-    unsolvable = [1,2,3,
-                  4,5,6,
-                  8,7,0]
+    hard_start   = [8,0,6,
+                    5,4,7,
+                    2,3,1]
 
-    print("Testing Parity Check...\n")
-    solver = PuzzleSolver(start = unsolvable, goal = goal_arr)
-    solver.solve()
+    easy_goal    = [1,2,3,
+                    4,5,6,
+                    7,8,0]
 
-    print("\nTesting Breadth First Search...\n")
-    solver = PuzzleSolver(start = start_arr, goal = goal_arr)
-    solver.solve()
+    medium_goal  = [1,2,3,
+                    8,0,4,
+                    7,6,5]
 
-    print("\nTesting Misplaced Tiles A* Search...\n")
-    solver = PuzzleSolver(start = start_arr, goal = goal_arr, h_func = "misplaced")
-    solver.solve() 
+    hard_goal    = [0,1,2,
+                    3,4,5,
+                    6,7,8]
+    
+    unsolvable   = [1,2,3,
+                    4,5,6,
+                    8,7,0]
+    
+    test_cases = [(unsolvable, easy_goal), 
+                  (easy_start, easy_goal), 
+                  (medium_start, medium_goal),
+                  (hard_start, hard_goal)]
+    for start_state, goal_state in test_cases:
 
-    print("\nTesting Manhattan Distance A* Search...\n")
-    solver = PuzzleSolver(start = start_arr, goal = goal_arr, h_func = "manhattan")
-    solver.solve()
+        print("\nTesting Breadth First Search...\n")
+        solver = PuzzleSolver(start = start_state, goal = goal_state)
+        solver.solve()
 
-    print("\nTesting Gaschnig A* Search...\n")
-    solver = PuzzleSolver(start = start_arr, goal = goal_arr, h_func = "gaschnig")
-    solver.solve()
+        print("\nTesting Misplaced Tiles A* Search...\n")
+        solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "misplaced")
+        solver.solve() 
+
+        print("\nTesting Manhattan Distance A* Search...\n")
+        solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "manhattan")
+        solver.solve()
+
+        print("\nTesting Gaschnig A* Search...\n")
+        solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "gaschnig")
+        solver.solve()
 
