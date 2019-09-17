@@ -43,7 +43,7 @@ class PuzzleSolver:
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos+1]
             child_arr[pos+1] = 0
-            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.f, h_func = self.h_func)
+            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
             if new_child not in self.closed_nodes:
                 children.append(new_child)
         
@@ -51,7 +51,7 @@ class PuzzleSolver:
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-1]
             child_arr[pos-1] = 0
-            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.f, h_func = self.h_func)
+            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
             if new_child not in self.closed_nodes:
                 children.append(new_child)
         
@@ -59,7 +59,7 @@ class PuzzleSolver:
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos+3]
             child_arr[pos+3] = 0
-            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.f, h_func = self.h_func)
+            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
             if new_child not in self.closed_nodes:
                 children.append(new_child)
 
@@ -67,7 +67,7 @@ class PuzzleSolver:
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-3]
             child_arr[pos-3] = 0
-            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.f, h_func = self.h_func)
+            new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
             if new_child not in self.closed_nodes:
                 children.append(new_child)
 
