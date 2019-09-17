@@ -16,6 +16,18 @@ class PuzzleSolver:
 
         self.closed_nodes = [] # storing previously expanded nodes for reference
   
+    def getParity(puzzle_arr):
+        parity = 0
+        for i in range(8): # only go to 8 because we don't need to check the last number
+            for j in range(i+1, 9):
+                if puzzle_arr[i] == 0 or puzzle_arr[j] == 0: # ignore the blank space
+                    continue
+                if puzzle_arr[i] > puzzle_arr[j]: # inversion found, increase parity count
+                        parity += 1
+        return parity
+
+    def solvable(start_arr, goal_arr):
+        return PuzzleSolver.getParity(start_arr) % 2 == PuzzleSolver.getParity(goal_arr) % 2
 
     # trace path for current back to start and print from start to current (goal)
     def traceToParent(self, current):
@@ -75,6 +87,10 @@ class PuzzleSolver:
 
 
     def solve(self):
+        if not PuzzleSolver.solvable(self.start.puzzle_arr, self.goal):
+            print("ERROR (parity): This puzzle is not solvable due to incompatible parities between start and goal states.")
+            return
+
         while not self.open_nodes.empty():
             current = self.open_nodes.get() # get lowest f score node
 
@@ -96,8 +112,16 @@ class Main:
     goal_arr  = [1,2,3,
                  4,5,6,
                  7,8,0]
+    
+    unsolvable = [1,2,3,
+                  4,5,6,
+                  8,7,0]
 
-    print("Testing Breadth First Search...\n")
+    print("Testing Parity Check...\n")
+    solver = PuzzleSolver(start = unsolvable, goal = goal_arr)
+    solver.solve()
+
+    print("\nTesting Breadth First Search...\n")
     solver = PuzzleSolver(start = start_arr, goal = goal_arr)
     solver.solve()
 

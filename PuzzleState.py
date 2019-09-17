@@ -57,7 +57,8 @@ class PuzzleState:
 
     def getBlank(self):
         return self.puzzle_arr.index(0)
-    
+
+
     """
     Heuristic Functions
     -------------------------------------------------------------------------------------------------
