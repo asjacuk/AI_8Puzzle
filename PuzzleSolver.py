@@ -17,6 +17,7 @@ class PuzzleSolver:
 
         self.closed_nodes = [] # storing previously expanded nodes for reference
   
+    # takes a puzzle array and returns the parity value of that array
     def getParity(puzzle_arr):
         parity = 0
         for i in range(8): # only go to 8 because we don't need to check the last number
@@ -27,6 +28,7 @@ class PuzzleSolver:
                         parity += 1
         return parity
 
+    # wrapper for determining if parities between two states are compatibile
     def solvable(start_arr, goal_arr):
         return PuzzleSolver.getParity(start_arr) % 2 == PuzzleSolver.getParity(goal_arr) % 2
 
@@ -46,6 +48,11 @@ class PuzzleSolver:
         print("Nodes closed:", self.expanded)
         print("Nodes open:", self.open_nodes.qsize())
 
+    """
+    Expands a node to determine possible children and checks to see if possible children
+    have already been found. If they have, discards those children and returns a list of the
+    viable children.
+    """
     def expand(self, current):
         pos = current.getBlank()
         n = 0 # number of iterations counter
@@ -97,7 +104,7 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
-            if self.expanded > 10000:
+            if self.expanded > 100000:
                 print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
                 return
             current = self.open_nodes.get() # get lowest f score node
@@ -107,8 +114,8 @@ class PuzzleSolver:
             
             self.closed_nodes.append(current)
             for child in self.expand(current):
-                self.open_nodes.put(child)
-                self.path_track[child] = current
+                self.open_nodes.put(child) # add the new children to the queue
+                self.path_track[child] = current # track the path for use later
             
             self.expanded += 1 # increase in expanded counter
 
@@ -124,8 +131,12 @@ class Main:
     hard_start   = [8,0,6,
                     5,4,7,
                     2,3,1]
+    
+    g26_start    = [7,2,4,
+                    5,0,6,
+                    8,3,1]
 
-    easy_goal    = [1,2,3,
+    br_goal      = [1,2,3,
                     4,5,6,
                     7,8,0]
 
@@ -133,7 +144,7 @@ class Main:
                     8,0,4,
                     7,6,5]
 
-    hard_goal    = [0,1,2,
+    tl_goal      = [0,1,2,
                     3,4,5,
                     6,7,8]
     
@@ -141,10 +152,8 @@ class Main:
                     4,5,6,
                     8,7,0]
     
-    test_cases = [(unsolvable, easy_goal), 
-                  (easy_start, easy_goal), 
-                  (medium_start, medium_goal),
-                  (hard_start, hard_goal)]
+    test_cases = [(g26_start, tl_goal)]
+    
     for start_state, goal_state in test_cases:
 
         print("\nTesting Breadth First Search...\n")
