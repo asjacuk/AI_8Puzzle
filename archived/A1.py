@@ -22,7 +22,7 @@ class Vertex:
     """
     # equality
     def __eq__(self, other):
-        return self.f == other.f
+        return self.arr == other.arr
     # less than
     def __lt__(self, other):
         return self.f < other.f
@@ -251,6 +251,65 @@ class Graph:
 
         while not q.empty():
             current = q.get() # get lowest 
+
+class PuzzleSolver:
+
+    def __init__(self, start = Vertex(), goal = Vertex(), h_func = None):
+        self.start = start # start puzzle state Vertex
+        self.goal = goal # goal puzzle state Vertex
+        self.h_func = __hfunc(h_func) # mapping Vertex h function
+        self.path_track = {} # empty dict to keep track of puzzle paths
+        self.expanded = 0 # counter for number of expanded nodes during search
+
+        # initialize PriorityQueue for tracking open nodes
+        self.open_nodes = PriorityQueue()
+        self.open_nodes.put(start)
+
+        self.closed_nodes = [] # storing previously expanded nodes for reference
+
+    # mapping h_func strings to actual functions in Vertex class
+    def __hfunc(self, h_func):
+        return {
+            'misplaced' : Vertex.misplacedTiles,
+            'manhattan' : Vertex.manhattanDistance,
+            'gaschnig' : Vertex.gaschnig
+        }.get(h_func, -1)
+
+    # trace path for current back to start and print from start to current (goal)
+    def traceToParent(self, current):
+        path = []
+        while current in path_track:
+            path.append(current)
+            current = path_track[current]
+        while path:
+            print(path.pop(0))
+
+    def expand(self, current):
+        pos = current.arr.index(' ')
+        n = 0 # number of iterations counter
+        children = [] # list to store children expanded off of current node
+        child_arr = current.arr.copy()
+
+        if pos % 3 == 0 or pos % 3 == 1: # can move blank right
+            child_arr[pos] = current.arr[pos+1]
+            child_arr[pos+1] = ' '
+            children.append(Vertex(arr = child_arr, parent = current, ))
+
+
+    def search(self):
+        while not self.open_nodes.empty():
+            current = open_nodes.get() # get lowest f score node
+
+            if current == goal: # found solution, get the path
+                return self.traceToParent(current)
+            
+            closed_nodes.append(current)
+            for child in expand(current):
+                open_nodes.put(child)
+            
+
+
+    
 
 
 class Main:
