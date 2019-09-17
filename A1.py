@@ -1,4 +1,4 @@
-
+from queue import PriorityQueue
 
 class Vertex:    
     """Class representing each puzzle."""
@@ -15,7 +15,50 @@ class Vertex:
         self.expanded = expanded
         self.g = 0
         self.h = 0
+        self.f = 0
 
+    """
+    Overriding the comparison operators to allow Vertex class to be easily comparable
+    using their f values for priority queue implememtation to be used during searches
+    """
+    # equality
+    def __eq__(self, other):
+        return self.f == other.f
+    # less than
+    def __lt__(self, other):
+        return self.f < other.f
+    # less than or equal
+    def __le__(self, other):
+        return self.f <= other.f
+    # greater than
+    def __gt__(self, other):
+        return self.f > other.f
+    # greater than or equal
+    def __ge__(self, other):
+        return self.f >= other.f
+    # not equal (inequality)
+    def __ne__(self, other):
+        return self.f != other.f
+
+    """"
+    Heuristic Functions
+    -------------------------------------------------------------------------------------------------
+    These functions are intended to be used in order to calculate h(n) of a Vertex with h() being the 
+    heuristic function selected for the search and n being any node processed during that search.
+    The value of h(n) is used to determine the value of f(n) = g(n) + h(n) in order to identify which
+    Vertex should be expanded next.
+    -------------------------------------------------------------------------------------------------
+    misplacedTiles - calculates the number of tiles that are in the incorrect position when compared
+        to the goal positions and both stores and returns this value for further use
+    
+    manhattanDistance - calculates the Manhattan Distance of moves required to get the current state
+        to the goal state and both stores and returns this value for further use
+
+    gaschnig - calculates the Gaschnig value resulting from the number of moves needed to solve the
+        puzzle from the current state to the goal state using the relaxed rules that any tile can be
+        moved to the blank spot in a single move, regardless of other tiles, and both stores and 
+        returns this value
+    """"
     # takes a goal array and returns number of misplaced tiles from current puzzle state to goal
     def misplacedTiles(self, goal):
         self.h = sum(1 for i, j in zip(self.arr, goal) if i != j)
@@ -177,15 +220,39 @@ class Graph:
 
         else:
             print("This puzzle is not solvable!")
+    
+    def a_star_search(start, goal, h_func):
+        # initialize the priority queue and add start
+        q = PriorityQueue()
+        q.put((0, start))
+
+        parent_path = {} # empty dict to store parents of each Vertex expanded
+
+        # initialize g and f dictionaries with Vertex as key and corresponding g and f values
+        g = {start:0}
+        f = {start:h_func(start)}
+
+        while not q.empty():
+            current = q.get()
 
 class a_star:
     
     def __init__(self, start, goal, h_func):
-        open_nodes = {start}
-        
+        open_nodes = [start]
+        self.goal = goal
+        self.h_func = h_func
         g = {start:0}
         f = {start:h_func(start, goal.arr)}
         print(f[start])
+        self.a_star_search()
+
+    def a_star_search(self):
+
+        while len(open_nodes) != 0:
+            current = getMinF()
+        
+    def getMinF(self):
+        return min(open_nodes)
 
 class Main:
 
