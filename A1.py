@@ -2,7 +2,6 @@ from queue import PriorityQueue
 
 class Vertex:    
     """Class representing each puzzle."""
-    queList = []
     finished = False
     finalNodes = 0
 
@@ -40,7 +39,21 @@ class Vertex:
     def __ne__(self, other):
         return self.f != other.f
 
-    """"
+    
+    """
+    Utility Functions
+    -------------------------------------------------------------------------------------------------
+    """
+    # overriding __str__ to provide print()-ability of puzzle states
+    def __str__(self):
+        row1 = str(self.arr[0:3])
+        row2 = str(self.arr[3:6])
+        row3 = str(self.arr[6:9])
+        message = "{r1}\n{r2}\n{r3}\n".format(r1 = row1, r2 = row2, r3 = row3)
+        return message
+
+
+    """
     Heuristic Functions
     -------------------------------------------------------------------------------------------------
     These functions are intended to be used in order to calculate h(n) of a Vertex with h() being the 
@@ -58,7 +71,7 @@ class Vertex:
         puzzle from the current state to the goal state using the relaxed rules that any tile can be
         moved to the blank spot in a single move, regardless of other tiles, and both stores and 
         returns this value
-    """"
+    """
     # takes a goal array and returns number of misplaced tiles from current puzzle state to goal
     def misplacedTiles(self, goal):
         self.h = sum(1 for i, j in zip(self.arr, goal) if i != j)
@@ -224,7 +237,7 @@ class Graph:
     def a_star_search(start, goal, h_func):
         # initialize the priority queue and add start
         q = PriorityQueue()
-        q.put((0, start))
+        q.put(start)
 
         parent_path = {} # empty dict to store parents of each Vertex expanded
 
@@ -233,7 +246,7 @@ class Graph:
         f = {start:h_func(start)}
 
         while not q.empty():
-            current = q.get()
+            current = q.get() # get lowest 
 
 class a_star:
     
@@ -260,6 +273,7 @@ class Main:
     goalAX = [1,2,3,4,5,6,7,8,' ']
     
     nv = Vertex(ax, 0, None, False, [])
+    print(nv)
     goal = Vertex(goalAX)
     a_star(nv, goal, Vertex.misplacedTiles)
     
