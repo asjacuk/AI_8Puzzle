@@ -52,6 +52,10 @@ class Vertex:
         message = "{r1}\n{r2}\n{r3}\n".format(r1 = row1, r2 = row2, r3 = row3)
         return message
 
+    # overriding hashing behavior for use of class as a key in dict
+    def __hash__(self):
+        return hash(tuple(self.arr))
+
 
     """
     Heuristic Functions
@@ -248,24 +252,6 @@ class Graph:
         while not q.empty():
             current = q.get() # get lowest 
 
-class a_star:
-    
-    def __init__(self, start, goal, h_func):
-        open_nodes = [start]
-        self.goal = goal
-        self.h_func = h_func
-        g = {start:0}
-        f = {start:h_func(start, goal.arr)}
-        print(f[start])
-        self.a_star_search()
-
-    def a_star_search(self):
-
-        while len(open_nodes) != 0:
-            current = getMinF()
-        
-    def getMinF(self):
-        return min(open_nodes)
 
 class Main:
 
@@ -275,7 +261,6 @@ class Main:
     nv = Vertex(ax, 0, None, False, [])
     print(nv)
     goal = Vertex(goalAX)
-    a_star(nv, goal, Vertex.misplacedTiles)
     
     Graph.initTree(nv, goalAX)
     
