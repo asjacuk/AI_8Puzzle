@@ -104,7 +104,7 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
-            if self.expanded > 100000:
+            if self.expanded > 10000:
                 print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
                 return
             current = self.open_nodes.get() # get lowest f score node
