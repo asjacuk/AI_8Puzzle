@@ -151,8 +151,17 @@ class Main:
     unsolvable   = [1,2,3,
                     4,5,6,
                     8,7,0]
+
+
+
+    test_start1   = [0, 1, 3,
+                     4, 2, 5,
+                     7, 8, 6]
+
+        
+
     
-    test_cases = [(g26_start, tl_goal)]
+    test_cases = [(test_start1, br_goal)]
     
     for start_state, goal_state in test_cases:
 
