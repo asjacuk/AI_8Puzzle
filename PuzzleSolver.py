@@ -13,6 +13,7 @@ class PuzzleSolver:
         self.h_func = h_func # recording h function to be used for calculating f
         self.path_track = {} # empty dict to keep track of puzzle paths
         self.expanded = 0 # counter for number of expanded nodes during search
+        self.max_search_space = 0 # tracker for max size of the search space during search
 
         # initialize PriorityQueue for tracking open nodes
         self.found_nodes = [self.start]
@@ -42,13 +43,13 @@ class PuzzleSolver:
         while current in self.path_track:
             path.append(current)
             current = self.path_track[current]
-        path.append(self.start)
         solLen = len(path)
+        path.append(self.start)
         while path:
             node = path.pop()
             print(node)
         print("\n\tNodes expanded:", self.expanded)
-        print("\tNodes open:\t ", self.open_nodes.qsize())
+        print("\tMax search space:", self.open_nodes.qsize())
         print("\tSolution length:", solLen)
 
     """
@@ -58,8 +59,6 @@ class PuzzleSolver:
     """
     def expand(self, current):
         pos = current.getBlank()
-        n = 0 # number of iterations counter
-        """Is there a reason we're tracking number of iterations here?"""
         children = [] # list to store children expanded off of current node
         child_arr = current.puzzle_arr.copy()
 
@@ -108,9 +107,11 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
-            if self.expanded > 10000:
+            if self.expanded > 150000:
                 print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
                 return
+            if self.open_nodes.qsize() > self.max_search_space:
+                self.max_search_space = self.open_nodes.qsize()
             current = self.open_nodes.get() # get lowest f score node
 
             if current.puzzle_arr == self.goal: # found solution, get the path
@@ -125,7 +126,7 @@ class PuzzleSolver:
 
 class Main:
     
-    med_start = [3,6,4,
+    med_start    = [3,6,4,
                     0,1,2,
                     8,7,5]
 
@@ -134,10 +135,18 @@ class Main:
                     8,0,4,
                     7,6,5]
 
+    hard_start   = [8,0,6,
+                    5,4,7,
+                    2,3,1]
+    
+    hard_goal    = [0,1,2,
+                    3,4,5,
+                    6,7,8]
 
 
-    startArr = med_start.copy()
-    goalArr = medium_goal.copy()
+
+    startArr = hard_start.copy()
+    goalArr = hard_goal.copy()
     #goalArr = [1,2,3,4,5,6,7,8,0]
 
     print("Enter the values three tiles of your start array, pressing enter between each number:")
@@ -178,8 +187,8 @@ class Main:
             print("Not a number. Try again.")
     
 
-    print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t\t", startArr[3:6], "\n\t\t", startArr[6:])    
-    print("\nGOAL:\t", goalArr[:3], "\n\t\t", goalArr[3:6], "\n\t\t", goalArr[6:])
+    print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])    
+    print("\nGOAL:\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
 
     searchAlgs = ["Breadth First Search", "Misplaced Tiles A* Search", "Manhattan Distance A* Search","Gaschnig A* Search"]
     print()
@@ -205,11 +214,11 @@ class Main:
     cases = [(startArr, goalArr)]
     
     for start_state, goal_state in cases:
-        
-        for val in searchAlgs:
-            print("\nTesting", val, "...")
-            solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
-            solver.solve()
+        val = searchAlgs[validNum]
+        #for val in searchAlgs:
+        print("\nTesting", val, "...")
+        solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
+        solver.solve()
         
         
         
