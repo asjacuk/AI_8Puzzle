@@ -11,7 +11,7 @@ class PuzzleSolver:
         self.start = PuzzleState(puzzle_arr = start, goal = goal, h_func = h_func) # start puzzle state PuzzleState
         self.goal = goal # goal puzzle state PuzzleState
         self.h_func = h_func # recording h function to be used for calculating f
-        self.path_track = {} # empty dict to keep track of puzzle paths
+        self.path_track = {self.start : 0} # empty dict to keep track of puzzle paths
         self.expanded = 0 # counter for number of expanded nodes during search
         self.max_search_space = 0 # tracker for max size of the search space during search
 
@@ -67,7 +67,7 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos+1]
             child_arr[pos+1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.found_nodes:
+            if new_child not in self.path_track:
                 children.append(new_child)
                 self.found_nodes.append(new_child)
         
@@ -76,7 +76,7 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos-1]
             child_arr[pos-1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.found_nodes:
+            if new_child not in self.path_track:
                 children.append(new_child)
                 self.found_nodes.append(new_child)
         
@@ -85,7 +85,7 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos+3]
             child_arr[pos+3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.found_nodes:
+            if new_child not in self.path_track:
                 children.append(new_child)
                 self.found_nodes.append(new_child)
 
@@ -94,7 +94,7 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos-3]
             child_arr[pos-3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.found_nodes:
+            if new_child not in self.path_track:
                 children.append(new_child)
                 self.found_nodes.append(new_child)
 
