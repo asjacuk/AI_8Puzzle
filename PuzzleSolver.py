@@ -1,9 +1,11 @@
 #import sys 
 #sys.path.append("C:/Users/andre/Documents/School/2019.fall/AI_A1/AI_8Puzzle")
 #Kris, ignore the above...
+#the above has been ignored by Kris.
 
 from PuzzleState import PuzzleState
 from queue import PriorityQueue
+import time
 
 class PuzzleSolver:
     
@@ -122,9 +124,9 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
-            if self.expanded > 150000:
-                print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
-                return
+            #if self.expanded > 150000:
+            #    print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
+            #    return
             if self.open_nodes.qsize() > self.max_search_space:
                 self.max_search_space = self.open_nodes.qsize()
             current = self.open_nodes.get() # get lowest f score node
@@ -169,7 +171,7 @@ class Main:
         if len(startArr) < 9:
             print("Enter the values for tiles of your start array, pressing enter between each number (0 for blank):")
             while len(startArr) < 9:
-                tmp = input()
+                tmp = input(">> ")
                 
                 try:
                     tmpNum = int(tmp)
@@ -189,7 +191,7 @@ class Main:
         if len(goalArr) < 9:
             print("Enter the values to build your goal array. Press enter between each value.")
             while len(goalArr) < 9:
-                tmp = input()
+                tmp = input(">> ")
                 try:
                     tmpNum = int(tmp)
                     if tmpNum in goalArr:
@@ -216,7 +218,7 @@ class Main:
         validNum = 99
         
         while validNum not in range(0,4):
-            tmp = input()
+            tmp = input(">> ")
             try:
                 tmpNum = int(tmp)
                 if tmpNum in range(0,4):
@@ -230,11 +232,15 @@ class Main:
         cases = [(startArr, goalArr)]
         
         for start_state, goal_state in cases:
+            start = time.time()
             val = searchAlgs[validNum]
             #for val in searchAlgs:
             print("\nTesting", val, "...")
             solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
             solver.solve()
+            end = time.time()
+            print("\tSolution found in:", end - start, "seconds")
+            print()
         
         control = ['n', 's', 'q']
         while menu_choice not in control:
@@ -246,7 +252,7 @@ class Main:
             print("   S    | Select new (S)earch algorithm, same arrays")
             print("   Q    | (Q)uit the program                        ")
             print()
-            menu_choice = input()[0].lower()
+            menu_choice = input(">> ")[0].lower()
         
         if menu_choice == 'n':
             startArr = []
