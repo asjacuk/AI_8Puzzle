@@ -160,83 +160,100 @@ class Main:
     hard_goal    = [0,1,2,
                     3,4,5,
                     6,7,8]
-
-
-
-    startArr = hard_start.copy()
-    goalArr = hard_goal.copy()
+    menu_choice = 0
+    startArr = []
+    goalArr = []
     #goalArr = [1,2,3,4,5,6,7,8,0]
+    while menu_choice != 'q':
+        menu_choice = 0
+        if len(startArr) < 9:
+            print("Enter the values for tiles of your start array, pressing enter between each number (0 for blank):")
+            while len(startArr) < 9:
+                tmp = input()
+                
+                try:
+                    tmpNum = int(tmp)
+                    if tmpNum in startArr:
+                        print("Number has already been entered into the start array. Enter another number.")
+                    elif tmpNum not in range(0,9):
+                        print("Number should be between 0 and 8. Enter another number.")
+                    else:
+                        startArr.append(tmpNum)
+                        print ("\t",startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])
+                except ValueError:
+                    print("Not a number. Try again.")
+            
+            print ("Your start array is the following:")
+            print ("\t",startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])
 
-    print("Enter the values three tiles of your start array, pressing enter between each number:")
-    while len(startArr) < 9:
-        tmp = input()
+        if len(goalArr) < 9:
+            print("Enter the values to build your goal array. Press enter between each value.")
+            while len(goalArr) < 9:
+                tmp = input()
+                try:
+                    tmpNum = int(tmp)
+                    if tmpNum in goalArr:
+                        print("Number has already been entered into goal array.")
+                    elif tmpNum not in range(0,9):
+                        print("Number should be between 0 and 8. Enter another number.")
+                    else:
+                        goalArr.append(tmpNum)
+                        print("\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
+                except ValueError:
+                    print("Not a number. Try again.")
         
-        try:
-            tmpNum = int(tmp)
-            if tmpNum in startArr:
-                print("Number has already been entered into the start array. Enter another number.")
-            elif tmpNum not in range(0,9):
-                print("Number should be between 0 and 8. Enter another number.")
-            else:
-                startArr.append(tmpNum)
-                print ("\t",startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])
-        except ValueError:
-            print("Not a number. Try again.")
+
+        print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])    
+        print("\nGOAL:\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
+
+        searchAlgs = ["Breadth First Search", "Misplaced Tiles A* Search", "Manhattan Distance A* Search","Gaschnig A* Search"]
+        print()
+
+        for val in searchAlgs:
+            print(searchAlgs.index(val), "\t", val)
         
-    
-    
-    print ("Your start array is the following:")
-    print ("\t",startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])
-
-
-    print("Enter the values to build your goal array. Press enter between each value.")
-    while len(goalArr) < 9:
-        tmp = input()
-        try:
-            tmpNum = int(tmp)
-            if tmpNum in goalArr:
-                print("Number has already been entered into goal array.")
-            elif tmpNum not in range(0,9):
-                print("Number should be between 0 and 8. Enter another number.")
-            else:
-                goalArr.append(tmpNum)
-                print("\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
-        except ValueError:
-            print("Not a number. Try again.")
-    
-
-    print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])    
-    print("\nGOAL:\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
-
-    searchAlgs = ["Breadth First Search", "Misplaced Tiles A* Search", "Manhattan Distance A* Search","Gaschnig A* Search"]
-    print()
-
-    for val in searchAlgs:
-        print(searchAlgs.index(val), "\t", val)
-    
-    print("\nEnter the number corresponding to which search technique to use above:")
-    validNum = 99
-    
-    while validNum not in range(0,4):
-        tmp = input()
-        try:
-            tmpNum = int(tmp)
-            if tmpNum in range(0,4):
-                validNum = tmpNum
-        except ValueError:
-            print("Try again.")
+        print("\nEnter the number corresponding to which search technique to use above:")
+        validNum = 99
         
-    
-    
-    
-    cases = [(startArr, goalArr)]
-    
-    for start_state, goal_state in cases:
-        val = searchAlgs[validNum]
-        #for val in searchAlgs:
-        print("\nTesting", val, "...")
-        solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
-        solver.solve()
+        while validNum not in range(0,4):
+            tmp = input()
+            try:
+                tmpNum = int(tmp)
+                if tmpNum in range(0,4):
+                    validNum = tmpNum
+            except ValueError:
+                print("Try again.")
+            
+        
+        
+        
+        cases = [(startArr, goalArr)]
+        
+        for start_state, goal_state in cases:
+            val = searchAlgs[validNum]
+            #for val in searchAlgs:
+            print("\nTesting", val, "...")
+            solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
+            solver.solve()
+        
+        control = ['n', 's', 'q']
+        while menu_choice not in control:
+            print("Please select from the following options, enter to confirm:")
+            print()
+            print(" Option | Description                               ")
+            print("----------------------------------------------------")
+            print("   N    | Input (N)ew arrays for search             ")
+            print("   S    | Select new (S)earch algorithm, same arrays")
+            print("   Q    | (Q)uit the program                        ")
+            print()
+            menu_choice = input()[0].lower()
+        
+        if menu_choice == 'n':
+            startArr = []
+            goalArr = []
+
+
+
         
         
         
