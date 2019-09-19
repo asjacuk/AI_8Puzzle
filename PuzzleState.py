@@ -96,6 +96,7 @@ class PuzzleState:
         moved to the blank spot in a single move, regardless of other tiles, and returns this value
     """
     
+    # zip the arrays together and check for mismatches
     def misplacedTiles(self, goal):
         return sum(1 for i, j in zip(self.puzzle_arr, goal) if i != j)
             

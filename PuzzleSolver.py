@@ -100,7 +100,22 @@ class PuzzleSolver:
 
         return children
 
-
+    """
+    A* Search Algorithm - solve()
+    --------------------------------------------------------------------------------------------------------------------------
+    This is an implementation of the A* search algorithm that processes discovered nodes according to the function:
+                f(n)   =    g(n)    +   h(n)
+    for any node n with:
+            f(n) = fitness of node
+            g(n) = distance from start to node
+            h(n) = heuristic value of the node
+    
+    This implementation of the A* search algorithm is designed to search for solution paths to the 8 tile puzzle with
+    puzzle states being represented externally as PuzzleStates and internally as an array form of the board state with
+    f, g and h attributes. After finding a solution, solve() will output the board states of the solution path from
+    start to goal and display the number of nodes expanded in order to determine the solution, the largest the search
+    space (open nodes) reached at any point during the search, and the length of the solution path.
+    """
     def solve(self):
         if not PuzzleSolver.solvable(self.start.puzzle_arr, self.goal):
             print("ERROR (parity): This puzzle is not solvable due to incompatible parities between start and goal states.")
@@ -119,8 +134,11 @@ class PuzzleSolver:
             
             self.closed_nodes.append(current)
             for child in self.expand(current):
-                self.open_nodes.put(child) # add the new children to the queue
                 self.path_track[child] = current # track the path for use later
+                # **** IMPORTANT: Check children for goal state before adding to queue ****
+                if child.puzzle_arr == self.goal: 
+                    return self.traceToParent(child)
+                self.open_nodes.put(child) # add the new children to the queue
             
             self.expanded += 1 # increase in expanded counter
 
