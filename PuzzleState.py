@@ -1,7 +1,7 @@
 class PuzzleState:
 
 
-    def __init__(self, puzzle_arr = [], g = 0, h_func = None, goal = [1,2,3,4,5,6,7,8,0]):
+    def __init__(self, puzzle_arr = [], g = 0, h_func = 0, goal = [1,2,3,4,5,6,7,8,0]):
 
         self.puzzle_arr = puzzle_arr
         self.g = g
@@ -10,15 +10,29 @@ class PuzzleState:
 
     # mapping h_func strings to actual functions in PuzzleState class
     def __h_func(self, h_func, goal):
-        
-        if h_func == 'misplaced': 
+        if h_func == 0:
+            return 0
+        elif h_func == 1:
             return self.misplacedTiles(goal)
-        elif h_func == 'manhattan': 
+        elif h_func == 2:
             return self.manhattanDistance(goal)
-        elif h_func == 'gaschnig': 
+        elif h_func == 3:
             return self.gaschnig(goal)
         else:
+            print(h_func)
             return 0
+        
+            
+        
+        
+        # if h_func == 'misplaced': 
+        #     return self.misplacedTiles(goal)
+        # elif h_func == 'manhattan': 
+        #     return self.manhattanDistance(goal)
+        # elif h_func == 'gaschnig': 
+        #     return self.gaschnig(goal)
+        # else:
+        #     return 0
     
     """
     Overriding the comparison operators to allow Vertex class to be easily comparable
@@ -45,10 +59,10 @@ class PuzzleState:
 
     # overriding __str__ to provide print()-ability of puzzle states
     def __str__(self):
-        row1 = str(self.puzzle_arr[0:3])
-        row2 = str(self.puzzle_arr[3:6])
-        row3 = str(self.puzzle_arr[6:9])
-        message = "\n{r1}\n{r2}\n{r3}".format(r1 = row1, r2 = row2, r3 = row3)
+        row1 = str(self.puzzle_arr[0:3]) + "\th = " + str(self.h)
+        row2 = str(self.puzzle_arr[3:6]) + "\tg = " + str(self.g)
+        row3 = str(self.puzzle_arr[6:9]) + "\tf = h+g = " + str(self.f)
+        message = "\n\t{r1}\n\t{r2}\n\t{r3}".format(r1 = row1, r2 = row2, r3 = row3)
         return message
     
     # overriding hashing behavior for use of class as a key in dict
@@ -57,6 +71,10 @@ class PuzzleState:
 
     def getBlank(self):
         return self.puzzle_arr.index(0)
+
+
+
+
 
 
     """
