@@ -1,7 +1,9 @@
 """
+PuzzleState.py
 Authors: Kristopher Carroll & Andrea Jacuk
 CSCE A405 - Artificial Intelligence
 Assignment 1 - 8 Puzzle Solver
+09.19.2019
 """
 
 class PuzzleState:
@@ -28,20 +30,9 @@ class PuzzleState:
             print(h_func)
             return 0
         
-            
-        
-        
-        # if h_func == 'misplaced': 
-        #     return self.misplacedTiles(goal)
-        # elif h_func == 'manhattan': 
-        #     return self.manhattanDistance(goal)
-        # elif h_func == 'gaschnig': 
-        #     return self.gaschnig(goal)
-        # else:
-        #     return 0
     
     """
-    Overriding the comparison operators to allow Vertex class to be easily comparable
+    Overriding the comparison operators to allow PuzzleState class to be easily comparable
     using their f values for priority queue implememtation to be used during searches
     """
     # equality

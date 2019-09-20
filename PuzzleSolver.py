@@ -1,12 +1,10 @@
 """
+PuzzleSolver.py
 Authors: Kristopher Carroll & Andrea Jacuk
 CSCE A405 - Artificial Intelligence
 Assignment 1 - 8 Puzzle Solver
+09.19.2019
 """
-
-#import sys 
-#sys.path.append("C:/Users/andre/Documents/School/2019.fall/AI_A1/AI_8Puzzle")
-
 
 from PuzzleState import PuzzleState
 from queue import PriorityQueue
@@ -120,9 +118,6 @@ class PuzzleSolver:
             return
 
         while not self.open_nodes.empty():
-            #if self.expanded > 150000:
-            #    print("ERROR (search space): This puzzle is taking a very long time due to unoptimized expansion of search space.")
-            #    return
             if self.open_nodes.qsize() > self.max_search_space:
                 self.max_search_space = self.open_nodes.qsize()
             current = self.open_nodes.get() # get lowest f score node
@@ -142,8 +137,6 @@ class PuzzleSolver:
                     continue
                 self.path_track[child] = current # track the path for use later
                 # **** IMPORTANT: Check children for goal state before adding to queue ****
-                #if child.puzzle_arr == self.goal: 
-                #    return self.traceToParent(child)
                 self.open_dict[child] = child.g
                 self.open_nodes.put(child) # add the new children to the queue
             
@@ -151,6 +144,7 @@ class PuzzleSolver:
 
 class Main:
   
+    searchAlgs = ["Breadth First Search", "Misplaced Tiles A* Search", "Manhattan Distance A* Search","Gaschnig A* Search"]
     menu_choice = 0
     startArr = []
     goalArr = []
@@ -161,7 +155,6 @@ class Main:
             print("Enter the values for tiles of your start array, pressing enter between each number (0 for blank):")
             while len(startArr) < 9:
                 tmp = input(">> ")
-                
                 try:
                     tmpNum = int(tmp)
                     if tmpNum in startArr:
@@ -194,17 +187,14 @@ class Main:
                     print("Not a number. Try again.")
         
 
-        print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t", startArr[3:6], "\n\t", startArr[6:])    
-        print("\nGOAL:\t", goalArr[:3], "\n\t", goalArr[3:6], "\n\t", goalArr[6:])
-
-        searchAlgs = ["Breadth First Search", "Misplaced Tiles A* Search", "Manhattan Distance A* Search","Gaschnig A* Search"]
-        print()
+        print("Your arrays are the following:\nSTART:\t", startArr[:3], "\n\t\t", startArr[3:6], "\n\t\t", startArr[6:])    
+        print("\nGOAL:\t", goalArr[:3], "\n\t\t", goalArr[3:6], "\n\t\t", goalArr[6:], "\n")
 
         for val in searchAlgs:
             print(searchAlgs.index(val), "\t", val)
         
         print("\nEnter the number corresponding to which search technique to use above:")
-        validNum = 99
+        validNum = 666
         
         while validNum not in range(0,4):
             tmp = input(">> ")
@@ -223,13 +213,11 @@ class Main:
         for start_state, goal_state in cases:
             start = time.time()
             val = searchAlgs[validNum]
-            #for val in searchAlgs:
             print("\nTesting", val, "...")
             solver = PuzzleSolver(start = start_state, goal=goal_state, h_func = searchAlgs.index(val))
             solver.solve()
             end = time.time()
-            print("\tSolution found in:", end - start, "seconds")
-            print()
+            print("\tSolution found in:", end - start, "seconds\n")
         
         control = ['n', 's', 'q']
         while menu_choice not in control:
