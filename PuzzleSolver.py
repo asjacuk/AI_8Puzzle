@@ -1,7 +1,12 @@
+"""
+Authors: Kristopher Carroll & Andrea Jacuk
+CSCE A405 - Artificial Intelligence
+Assignment 1 - 8 Puzzle Solver
+"""
+
 #import sys 
 #sys.path.append("C:/Users/andre/Documents/School/2019.fall/AI_A1/AI_8Puzzle")
-#Kris, ignore the above...
-#the above has been ignored by Kris.
+
 
 from PuzzleState import PuzzleState
 from queue import PriorityQueue
@@ -145,27 +150,11 @@ class PuzzleSolver:
             self.expanded += 1 # increase in expanded counter
 
 class Main:
-    
-    med_start    = [3,6,4,
-                    0,1,2,
-                    8,7,5]
-
-
-    medium_goal  = [1,2,3,
-                    8,0,4,
-                    7,6,5]
-
-    hard_start   = [8,0,6,
-                    5,4,7,
-                    2,3,1]
-    
-    hard_goal    = [0,1,2,
-                    3,4,5,
-                    6,7,8]
+  
     menu_choice = 0
     startArr = []
     goalArr = []
-    #goalArr = [1,2,3,4,5,6,7,8,0]
+
     while menu_choice != 'q':
         menu_choice = 0
         if len(startArr) < 9:
@@ -257,64 +246,4 @@ class Main:
         if menu_choice == 'n':
             startArr = []
             goalArr = []
-
-
-
-        
-        
-        
-
-    
-    
-    # easy_start   = [1,2,3,
-    #                 4,8,5,
-    #                 7,0,6]
-
-   ##   medium_start = [3,6,4,
-    #                 0,1,2,
-    #                 8,7,5]
-    # 
-    # hard_start   = [8,0,6,
-    #                 5,4,7,
-    #                 2,3,1]
-    # 
-    # g26_start    = [7,2,4,
-    #                 5,0,6,
-    #                 8,3,1]
-
-   ##   br_goal      = [1,2,3,
-    #                 4,5,6,
-    #                 7,8,0]
-
-   ##   medium_goal  = [1,2,3,
-    #                 8,0,4,
-    #                 7,6,5]
-
-   ##   tl_goal      = [0,1,2,
-    #                 3,4,5,
-    #                 6,7,8]
-    # 
-    # unsolvable   = [1,2,3,
-    #                 4,5,6,
-    #                 8,7,0]
-    # 
-    # test_cases = [(g26_start, tl_goal)]
-    # 
-    # for start_state, goal_state in test_cases:
-
-   ##       print("\nTesting Breadth First Search...\n")
-    #     solver = PuzzleSolver(start = start_state, goal = goal_state)
-    #     solver.solve()
-
-   ##       print("\nTesting Misplaced Tiles A* Search...\n")
-    #     solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "misplaced")
-    #     solver.solve() 
-
-   ##       print("\nTesting Manhattan Distance A* Search...\n")
-    #     solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "manhattan")
-    #     solver.solve()
-
-   ##       print("\nTesting Gaschnig A* Search...\n")
-    #     solver = PuzzleSolver(start = start_state, goal = goal_state, h_func = "gaschnig")
-    #     solver.solve()
 

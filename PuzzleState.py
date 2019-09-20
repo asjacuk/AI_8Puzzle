@@ -1,3 +1,9 @@
+"""
+Authors: Kristopher Carroll & Andrea Jacuk
+CSCE A405 - Artificial Intelligence
+Assignment 1 - 8 Puzzle Solver
+"""
+
 class PuzzleState:
 
 
