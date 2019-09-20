@@ -18,11 +18,11 @@ class PuzzleSolver:
         self.max_search_space = 0 # tracker for max size of the search space during search
 
         # initialize PriorityQueue for tracking open nodes
-        self.found_nodes = [self.start]
         self.open_nodes = PriorityQueue()
         self.open_nodes.put(self.start)
 
-        self.closed_nodes = [] # storing previously expanded nodes for reference
+        self.closed_nodes = {} # storing previously expanded nodes for reference
+        self.open_dict = {self.start : self.start.g} # storing open nodes in dict for fast lookup
   
     # takes a puzzle array and returns the parity value of that array
     def getParity(puzzle_arr):
@@ -46,12 +46,11 @@ class PuzzleSolver:
             path.append(current)
             current = self.path_track[current]
         solLen = len(path)
-        path.append(self.start)
         while path:
             node = path.pop()
             print(node)
         print("\n\tNodes expanded:", self.expanded)
-        print("\tMax search space:", self.open_nodes.qsize())
+        print("\tMax search space:", self.max_search_space)
         print("\tSolution length:", solLen)
 
     """
@@ -69,36 +68,28 @@ class PuzzleSolver:
             child_arr[pos] = current.puzzle_arr[pos+1]
             child_arr[pos+1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.path_track:
-                children.append(new_child)
-                self.found_nodes.append(new_child)
+            children.append(new_child)
         
         if pos % 3 == 1 or pos % 3 == 2: # can move blank left
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-1]
             child_arr[pos-1] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.path_track:
-                children.append(new_child)
-                self.found_nodes.append(new_child)
+            children.append(new_child)
         
         if pos // 3 == 0 or pos // 3 == 1: # can move blank down
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos+3]
             child_arr[pos+3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.path_track:
-                children.append(new_child)
-                self.found_nodes.append(new_child)
+            children.append(new_child)
 
         if pos // 3 == 1 or pos // 3 == 2: # can move blank up
             child_arr = current.puzzle_arr.copy()
             child_arr[pos] = current.puzzle_arr[pos-3]
             child_arr[pos-3] = 0
             new_child = PuzzleState(puzzle_arr = child_arr, goal = self.goal, g = current.g + 1, h_func = self.h_func)
-            if new_child not in self.path_track:
-                children.append(new_child)
-                self.found_nodes.append(new_child)
+            children.append(new_child)
 
         return children
 
@@ -134,12 +125,21 @@ class PuzzleSolver:
             if current.puzzle_arr == self.goal: # found solution, get the path
                 return self.traceToParent(current)
             
-            self.closed_nodes.append(current)
+            del self.open_dict[current] # remove from open node dict and add to closed nodes dict
+            self.closed_nodes[current] = current.g
             for child in self.expand(current):
+                if child in self.closed_nodes:
+                    continue
+                if child in self.open_dict:
+                    if child.g < self.open_dict[child]:
+                        self.open_dict[child] = child.g
+                        self.path_track[child] = current # update pathing to better path found
+                    continue
                 self.path_track[child] = current # track the path for use later
                 # **** IMPORTANT: Check children for goal state before adding to queue ****
-                if child.puzzle_arr == self.goal: 
-                    return self.traceToParent(child)
+                #if child.puzzle_arr == self.goal: 
+                #    return self.traceToParent(child)
+                self.open_dict[child] = child.g
                 self.open_nodes.put(child) # add the new children to the queue
             
             self.expanded += 1 # increase in expanded counter
