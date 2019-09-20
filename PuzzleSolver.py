@@ -51,7 +51,7 @@ class PuzzleSolver:
             print(node)
         print("\n\tNodes expanded:", self.expanded)
         print("\tMax search space:", self.max_search_space)
-        print("\tSolution length:", solLen)
+        print("\tSolution length:", solLen - 1)
 
     """
     Expands a node to determine possible children and checks to see if possible children
