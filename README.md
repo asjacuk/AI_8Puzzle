@@ -1,4 +1,4 @@
-#8 Puzzle Solver with Informed and Uninformed Search
+# 8 Puzzle Solver with Informed and Uninformed Search
 
 Solving 8 Puzzle configurations using a combination of uninformed and informed search algorithms.
 Uninformed search is performed with breadth first search to provide a brute force optimal solution path.
